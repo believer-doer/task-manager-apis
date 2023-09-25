@@ -2,6 +2,11 @@
 import express from 'express';
 import httpStatusCodes from 'http-status-codes';
 import TaskManagerService from './task.manager.service.ts';
+import {RequestProperty, ValidationMiddleware} from '../middlewares/validator.js';
+import {TaskDto} from './dto/task.dto.js';
+import {GetTasksDto} from './dto/get-tasks.dto.js';
+import {TaskIdDto} from './dto/task-id.dto.js';
+import {UpdateTaskDto} from './dto/update-task.dto.js';
 
 export default class TaskManagerController {
   public path = '/tasks';
@@ -17,14 +22,18 @@ export default class TaskManagerController {
   public initializeRoutes() {
     this.app.post(
         `${this.path}`,
+        ValidationMiddleware.validateDto(RequestProperty.Body, TaskDto),
         this.addTask
     );
     this.app.get(
         `${this.path}`,
+        ValidationMiddleware.validateDto(RequestProperty.Query, GetTasksDto),
         this.getTasks
     );
     this.app.put(
         `${this.path}/:id`,
+        ValidationMiddleware.validateDto(RequestProperty.Params, TaskIdDto),
+        ValidationMiddleware.validateDto(RequestProperty.Body, UpdateTaskDto),
         this.updateTask
     );
     this.app.get(
@@ -33,10 +42,12 @@ export default class TaskManagerController {
     );
     this.app.get(
         `${this.path}/:id`,
+        ValidationMiddleware.validateDto(RequestProperty.Params, TaskIdDto),
         this.getTaskById
     );
     this.app.delete(
-        `${this.path}`,
+        `${this.path}/:id`,
+        ValidationMiddleware.validateDto(RequestProperty.Params, TaskIdDto),
         this.deleteTaskById
     );
   }
@@ -67,8 +78,8 @@ export default class TaskManagerController {
       response: express.Response, next : express.NextFunction) => {
     try {
       const taskId = request.params.id;
-      const addTasksData = request.body;
-      const result = await this.taskManagerService.updateTask(taskId, addTasksData);
+      const tasksData = request.body;
+      const result = await this.taskManagerService.updateTask(taskId, tasksData);
       response.status(httpStatusCodes.OK).json({message: 'success', data: result});
     } catch (error) {
       next(error);

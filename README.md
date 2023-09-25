@@ -5,12 +5,12 @@
 
 The repo contains the following apis:
 
-**POST /tasks** - to add a task <br />
+*POST /tasks** - to add a task <br />
 **GET /tasks** - to fetch tasks <br />
 **GET /tasks/:id** - to get a task by id <br />
 **GET /tasks/metrics** - to get tasks metrics <br />
 **PUT /tasks/:id** - to update a task<br />
-**DELETE/tasks/:id** - to delete a task <br />
+**DELETE /tasks/:id** - to delete a task <br />
 
 
 ### Installation

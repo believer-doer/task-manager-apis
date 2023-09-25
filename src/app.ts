@@ -1,4 +1,3 @@
-import compression from 'compression';
 import express, {NextFunction, Request, Response} from 'express';
 import helmet from 'helmet';
 import * as swaggerUi from 'swagger-ui-express';
@@ -8,7 +7,7 @@ import TaskManagerService from './task-manager/task.manager.service.ts';
 import TaskManagerController from './task-manager/task-manager.controller';
 
 const logger = Logger.getInstance();
-// Creates and configures an ExpressJS web server.
+// Create and configure an Express app
 class App {
   public express: express.Application;
   constructor() {
@@ -17,22 +16,24 @@ class App {
     this.routes();
   }
 
-  // Configure Express middleware.
+  // Configure Express middlewares
   private middleware(): void {
-    this.express.use(express.json({limit: '1mb'}));
+    this.express.use(express.json());
     this.express.use(express.urlencoded({extended: false}));
     this.express.use(helmet());
-    this.express.use(compression());
   }
 
-  // Configure API endpoints.
+  // Configure API endpoints
   private routes(): void {
     const app = this.express;
+
     const taskManagerService = new TaskManagerService();
     const taskManagerController = new TaskManagerController(taskManagerService);
+
     app.use('/', taskManagerController.app);
+
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-      logger.error(JSON.stringify(err));
+      logger.error(err.message);
     });
 
     // Swagger

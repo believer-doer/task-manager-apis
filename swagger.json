@@ -183,15 +183,6 @@
           "Tasks"
         ],
         "description": "get tasks metrics",
-        "parameters": [
-          {
-            "name": "date",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",

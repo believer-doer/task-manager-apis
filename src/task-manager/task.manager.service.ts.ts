@@ -20,9 +20,9 @@ export default class TaskManagerService {
   };
 
   updateTask = async (id: string,
-      addTaskData: { title: string; description: string; status: TaskStatus; }
+      taskData: { title: string; description: string; status: TaskStatus; }
   ): Promise<void> => {
-    const {title, description, status} = addTaskData;
+    const {title, description, status} = taskData;
     await pool.execute(`UPDATE tasks SET title = '${title}', `+
         `description = '${description}', status = '${status}' WHERE ID = '${id}'`);
   };
@@ -41,6 +41,6 @@ export default class TaskManagerService {
   };
 
   deleteTaskById = async (id: string): Promise<void> => {
-    await pool.execute(`DELETE * FROM tasks WHERE ID = '${id}'`);
+    await pool.execute(`DELETE FROM tasks WHERE ID = '${id}'`);
   };
 }
